@@ -1,23 +1,29 @@
 $(document).ready(function () {
     var Item = Backbone.Model.extend({
+        url:'http://www.witmob.com'
     });
 
-    var item=new Item;
-    item.title='stabilo彩色铅笔';
-    item.price=24.50;
+    var item = new Item();
+    item.set(
+        {
+            'title':'stabilo彩色铅笔',
+            price:12.4
+        });
 
-    var ItemView=Backbone.Model.extend({
+    var ItemView = Backbone.Model.extend({
         el:$('#itemContent'),
         template:$('#item-tmpl').template(),
 
-        render:function(){
+        render:function () {
             console.log('render');
-            $.tmpl(this.template,this.model).appendTo(this.el);
+            $.tmpl(this.template, this.model).appendTo(this.el);
             return this;
         }
     });
 
-    var itemView=new ItemView;
-    itemView.model=item;
+    item.save();
+
+    var itemView = new ItemView;
+    itemView.model = item;
     itemView.render();
 });
