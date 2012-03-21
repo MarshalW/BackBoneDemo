@@ -10,12 +10,12 @@ $(document).ready(function () {
             price:12.4
         });
 
-    $.ajax({
-        url:'data.txt',
-        success:function (data) {
-            item.set('imgData',data);
-        }
-    });
+//    $.ajax({
+//        url:'data.txt',
+//        success:function (data) {
+//            item.set('imgData',data);
+//        }
+//    });
 
     var ItemView = Backbone.View.extend({
         el:$('#itemContent'),
