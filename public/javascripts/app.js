@@ -10,6 +10,13 @@ $(document).ready(function () {
             price:12.4
         });
 
+    $.ajax({
+        url:'data.txt',
+        success:function (data) {
+            item.set('imgData',data);
+        }
+    });
+
     var ItemView = Backbone.View.extend({
         el:$('#itemContent'),
         template:$('#item-modify-tmpl').template(),
@@ -23,8 +30,8 @@ $(document).ready(function () {
             this.model.set('title', ($(this.el).find('.itemTitle').first().val()));
         },
 
-        save:function(){
-          this.model.save();
+        save:function () {
+            this.model.save();
         },
 
         render:function () {

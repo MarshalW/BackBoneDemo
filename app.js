@@ -33,6 +33,16 @@ app.get('/', routes.index);
 
 app.post('/items', function (req, res) {
     console.log(req.body.title);
+
+    var base64Data=req.body.imgData.replace(/^data:image\/png;base64,/,"");
+    var binaryData=new Buffer(base64Data,'base64').toString('binary');
+
+    require('fs').writeFile('out.png',binaryData,'binary',function(err){
+        if(err){
+            console.log(err);
+        }
+    });
+
     res.send('saved.');
 });
 
