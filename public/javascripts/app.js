@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var Item = Backbone.Model.extend({
-        url:'http://www.witmob.com'
+        url:'/items'
     });
 
     var item = new Item();
@@ -15,13 +15,16 @@ $(document).ready(function () {
         template:$('#item-modify-tmpl').template(),
 
         events:{
-            'change .itemTitle':'changeTitle'
+            'change .itemTitle':'changeTitle',
+            'click .submit':'save'
         },
 
         changeTitle:function () {
-            console.log('title before change:' + this.model.get('title'));
             this.model.set('title', ($(this.el).find('.itemTitle').first().val()));
-            console.log('title after change:' + this.model.get('title'));
+        },
+
+        save:function(){
+          this.model.save();
         },
 
         render:function () {
@@ -34,23 +37,4 @@ $(document).ready(function () {
     var itemView = new ItemView;
     itemView.model = item;
     itemView.render();
-
-    var ItemShowView = Backbone.View.extend({
-        el:$('#itemShowContent'),
-        template:$('#item-show-tmpl').template(),
-
-        render:function () {
-            $(this.el).empty();
-            $.tmpl(this.template, this.model).appendTo(this.el);
-            return this;
-        }
-    });
-
-    var itemShowView=new ItemShowView;
-    itemShowView.model=item;
-    itemShowView.render();
-
-    item.on('change',function(){
-        itemShowView.render();
-    });
 });
