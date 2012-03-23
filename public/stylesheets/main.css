@@ -1,0 +1,61 @@
+@CHARSET "utf-8";
+
+/*@IMPORT url("layout_main.css");*/
+
+body{
+    background: rgba(0,0,0,0.1);
+    margin: 0;
+}
+
+.app{
+    margin: 0 auto;
+    width: 1024px;
+    height: 768px;
+    background: rgb(240, 240, 240);
+}
+
+.workSpace{
+    background: rgba(255,255,255,1);
+    width: 1024px;
+    height: 768px;
+    position: absolute;
+}
+
+.toolBar{
+    background: rgb(224, 224, 224);
+    width: 1024px;
+    height: 40px;
+    position: absolute;
+    vertical-align:middle;
+}
+
+.editArea{
+    background: rgb(255, 255, 255);
+    top: 40px;
+    width: 1024px;
+    height: 728px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.toolBarItem{
+    height: 34px;
+    margin: 3px;
+}
+
+.textArea{
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    background: rgb(255, 249, 178);
+    overflow: hidden;
+}
+
+.imageArea{
+    height: 384px;
+    width: 512px;
+    position: absolute;
+    background: rgb(212, 255, 176);
+    overflow: hidden;
+}
+
