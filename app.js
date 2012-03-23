@@ -4,10 +4,12 @@
 
 var express = require('express')
     , routes = require('./routes')
-    , ItemProvider = require('./modules/ItemProvider').ItemProvider;
+    , ItemProvider = require('./modules/ItemProvider').ItemProvider
+    , ImageFileProvider = require('./modules/ImageFileProvider.js').ImageFileProvider;
 
 var app = module.exports = express.createServer();
 var itemProvider = new ItemProvider('localhost', 27017);
+var fileProvider = new ImageFileProvider('localhost', 27017);
 
 // Configuration
 
@@ -32,22 +34,39 @@ app.configure('production', function () {
 
 app.get('/', routes.index);
 
+app.get('/image', function (req, res) {
+    console.log('get image');
+    res.contentType('image/png');
+    var fileId = req.param('fileId');
+    fileProvider.read(fileId, function (data) {
+        console.log('read data');
+        res.send(data);
+    });
+});
+
 app.post('/items', function (req, res) {
     console.log(req.body.title);
 
-//    var base64Data = req.body.imgData.replace(/^data:image\/png;base64,/, "");
-//    var binaryData = new Buffer(base64Data, 'base64').toString('binary');
-//
-//    require('fs').writeFile('out.png', binaryData, 'binary', function (err) {
-//        if (err) {
-//            console.log(err);
-//        }
-//    });
+    var item = req.body;
 
-    itemProvider.save(req.body,function(item){
-       console.log('save to mongodb:'+item._id);
-    });
+    if (item.imgData.indexOf('data:image\/png;base64,') != -1) {
+        console.log('base64 img');
 
+        var base64Data = item.imgData.replace(/^data:image\/png;base64,/, "");
+        var binaryData = new Buffer(base64Data, 'base64').toString('binary');
+
+        console.log('>>>>data.length:' + binaryData.length);
+        process.nextTick(function () {
+            fileProvider.insert(binaryData, function (result) {
+                console.log('file id:' + result._id);
+                item.imgData = result._id;
+
+                itemProvider.save(item, function (err, item) {
+                    console.log('save to mongodb:' + item._id);
+                });
+            });
+        });
+    }
     res.send('saved.');
 });
 

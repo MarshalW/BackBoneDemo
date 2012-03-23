@@ -22,7 +22,7 @@ ItemProvider.prototype.save = function (item, callback) {
         if (error) callback(error)
         else {
             collection.insert(item, function () {
-                callback(item);
+                callback(null,item);
             });
         }
     });

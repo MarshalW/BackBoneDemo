@@ -10,16 +10,25 @@ $(document).ready(function () {
             price:12.4
         });
 
-//    $.ajax({
-//        url:'data.txt',
-//        success:function (data) {
-//            item.set('imgData',data);
-//        }
-//    });
+    $.ajax({
+        url:'data.txt',
+        success:function (data) {
+            item.set('imgData', data);
+        }
+    });
 
     var ItemView = Backbone.View.extend({
         el:$('#itemContent'),
         template:$('#item-modify-tmpl').template(),
+
+        initialize:function (model) {
+            console.log('init item view.');
+            this.model=model;
+            var el=this.el;
+            this.model.on('change:imgData',function(){
+                $(el).find('#image')[0].src=model.get('imgData');
+            });
+        },
 
         events:{
             'change .itemTitle':'changeTitle',
@@ -41,7 +50,6 @@ $(document).ready(function () {
         }
     });
 
-    var itemView = new ItemView;
-    itemView.model = item;
+    var itemView = new ItemView(item);
     itemView.render();
 });
