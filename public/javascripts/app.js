@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    var app = {};
+    _.extend(app, Backbone.Events);
+
     var ToolBarItem = Backbone.Model.extend({
         initialize:function (title) {
             this.title = title;
@@ -14,10 +17,12 @@ $(document).ready(function () {
             return this;
         },
         events:{
-          'click':'action'
+            'click':'action'
         },
         action:function (view) {
             console.log(this.model.title);
+            app.trigger('toolBarItem', this.model.title);
+
         },
         initialize:function (model) {
             this.model = model;
@@ -28,9 +33,26 @@ $(document).ready(function () {
     var ToolBar = Backbone.Collection.extend({
         model:ToolBarItem,
         initialize:function () {
-            this.on('add',function(item){
-                new ToolBarItemView(item);
+            this.on('add', function (item) {
+                var itemView = new ToolBarItemView(item);
             });
+        }
+    });
+
+    var EditArea = Backbone.Collection.extend({
+        initialize:function () {
+            console.log('edit area');
+            app.on('toolBarItem', function () {
+                console.log('toolBar item');
+            });
+        }
+    });
+
+    var EditAreaView = Backbone.View.extend({
+        el:$('#editArea'),
+        initialize:function (model) {
+            this.model = model;
+            console.log('create edit area view');
         }
     });
 
@@ -40,4 +62,7 @@ $(document).ready(function () {
     toolBar.add(new ToolBarItem('文字'));
     toolBar.add(new ToolBarItem('图片'));
     toolBar.add(new ToolBarItem('保存'));
+
+    var editArea = new EditArea();
+    var editAreaView = new EditAreaView(editArea);
 });
