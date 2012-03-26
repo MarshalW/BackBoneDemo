@@ -6,15 +6,18 @@ $(document).ready(function () {
     });
 
     var ToolBarItemView = Backbone.View.extend({
+        className:'toolBarItem',
+        tagName:'button',
         render:function () {
-            $('<button class="toolBarItem">' + this.model.title + '</button>').appendTo($('#toolBar'));
+            $(this.el).appendTo('#toolBar');
+            $(this.el).html(this.model.title);
             return this;
         },
         events:{
-            "click":"action"
+          'click':'action'
         },
-        action:function () {
-            console.log(model.title);
+        action:function (view) {
+            console.log(this.model.title);
         },
         initialize:function (model) {
             this.model = model;
@@ -23,27 +26,16 @@ $(document).ready(function () {
     });
 
     var ToolBar = Backbone.Collection.extend({
-        model:ToolBarItem
-    });
-
-    var ToolBarView = Backbone.View.extend({
-        el:$('#workSpace'),
-        render:function () {
-            $(this.el).empty();
-            $('<div class="toolBar" id="toolBar"></div>').appendTo($(this.el));
-        },
-        initialize:function (model) {
-            this.model = model;
-            this.render();
-
-            this.model.on('add', function (item) {
+        model:ToolBarItem,
+        initialize:function () {
+            this.on('add',function(item){
                 new ToolBarItemView(item);
             });
         }
     });
 
+
     var toolBar = new ToolBar();
-    var toolBarView = new ToolBarView(toolBar);
 
     toolBar.add(new ToolBarItem('文字'));
     toolBar.add(new ToolBarItem('图片'));
